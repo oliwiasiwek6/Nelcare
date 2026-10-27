@@ -1,0 +1,362 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#f8edf5">
+<title>NelCare</title>
+<style>
+:root{--pink:#f4d9e8;--purple:#ddd5f7;--mint:#d9f0e7;--ink:#40384b;--white:#fffafd;--line:#eadfea}
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(160deg,#fff5fa,#f4f0ff 60%,#effaf5);color:var(--ink);font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+header{padding:26px 18px 20px;text-align:center;background:#ffffffa8;border-bottom:1px solid var(--line)}
+h1{font-size:32px;margin:0 0 5px;letter-spacing:-1px}
+header p{margin:0;color:#82768d}
+main{max-width:760px;margin:auto;padding:16px;display:grid;gap:14px}
+.card{background:var(--white);border:1px solid var(--line);border-radius:22px;padding:17px;box-shadow:0 5px 20px #6550800a}
+h2{font-size:19px;margin:0 0 13px}
+h3{font-size:16px;margin:0 0 8px}
+nav{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+button,.tab{border:0;border-radius:13px;padding:12px;background:var(--purple);color:var(--ink);font-weight:650;font-size:14px;cursor:pointer}
+button:disabled{opacity:.5}
+.tab{background:#f5edf7}
+.tab.active{background:var(--pink)}
+input,select,textarea{width:100%;padding:12px;border:1px solid #dfd4e4;border-radius:12px;background:white;color:var(--ink);font:inherit;margin:5px 0 10px}
+textarea{min-height:65px;resize:vertical}
+label{font-size:13px;font-weight:650}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.actions button{flex:1}
+.primary{background:#d5efe4}
+.danger{background:#f7dce5}
+.muted{font-size:13px;color:#82768d;line-height:1.5}
+.status{padding:10px 12px;border-radius:12px;background:#f2edf9;font-size:14px;line-height:1.5;overflow-wrap:anywhere}
+.entry{padding:12px 0;border-bottom:1px solid var(--line)}
+.entry:last-child{border-bottom:0}
+.entrytop{display:flex;justify-content:space-between;gap:8px;align-items:start}
+.entry strong{display:block;margin-bottom:4px}
+.entry small{color:#82768d}
+.pill{display:inline-block;background:var(--mint);border-radius:20px;padding:4px 8px;font-size:12px}
+.hidden{display:none!important}
+.bigtotal{font-size:30px;font-weight:750;letter-spacing:-1px}
+footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
+@media(min-width:600px){main{padding:24px}.card{padding:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:38px">💗</div>
+  <h1>NelCare</h1>
+  <p>Małe kroki, wspólna opieka</p>
+</header>
+
+<main>
+<section class="card">
+  <h2>💧 Woda</h2>
+  <div class="bigtotal" id="waterTotal">0 ml</div>
+  <p class="muted">Suma zapisanych porcji w wybranym dniu.</p>
+  <div class="row">
+    <div><label for="waterAmount">Ile wypiła?</label>
+      <select id="waterAmount">
+        <option value="60">60 ml</option>
+        <option value="100">100 ml</option>
+        <option value="120">120 ml</option>
+      </select>
+    </div>
+    <div><label for="waterTime">Godzina</label><input id="waterTime" type="time"></div>
+  </div>
+  <button class="primary" onclick="addWater()">+ Zapisz wodę</button>
+</section>
+
+<section class="card">
+  <h2>🚽 Toaleta</h2>
+  <label for="toiletAction">Co się wydarzyło?</label>
+  <select id="toiletAction">
+    <option value="sat">Usiadła na toalecie</option>
+    <option value="refused">Odmówiła</option>
+    <option value="not_tried">Nie próbowaliśmy</option>
+  </select>
+  <label for="toiletResult">Wynik</label>
+  <select id="toiletResult">
+    <option value="nothing">Nic</option>
+    <option value="pee">Siku</option>
+    <option value="poop">Kupa</option>
+    <option value="both">Siku i kupa</option>
+  </select>
+  <label for="toiletTime">Godzina</label><input id="toiletTime" type="time">
+  <label for="toiletNote">Notatka (opcjonalnie)</label><input id="toiletNote" placeholder="Np. sama usiadła">
+  <button class="primary" onclick="addToilet()">Zapisz toaletę</button>
+</section>
+
+<section class="card">
+  <h2>💩 Wypróżnienie</h2>
+  <div class="row">
+    <div><label for="poopConsistency">Konsystencja</label>
+      <select id="poopConsistency"><option>Normalna</option><option>Twarda</option><option>Miękka</option><option>Wodnista</option><option>Grudkowata</option><option>Inna</option></select>
+    </div>
+    <div><label for="poopColor">Kolor</label>
+      <select id="poopColor"><option>Brązowy</option><option>Jasny</option><option>Zielony</option><option>Żółty</option><option>Czarny</option><option>Czerwony</option><option>Inny</option></select>
+    </div>
+  </div>
+  <label for="poopTime">Godzina</label><input id="poopTime" type="time">
+  <label for="poopNote">Notatka (opcjonalnie)</label><input id="poopNote" placeholder="Dodatkowe obserwacje">
+  <button class="primary" onclick="addPoop()">Zapisz wypróżnienie</button>
+</section>
+
+<section class="card">
+  <h2>🍽️ Posiłek</h2>
+  <label for="mealName">Posiłek</label>
+  <select id="mealName">
+    <option>Śniadanie doustne</option><option>Śniadanie PEG</option>
+    <option>II śniadanie</option><option>Obiad doustny</option>
+    <option>Obiad PEG</option><option>Podwieczorek</option>
+    <option>Kolacja doustna</option><option>Kolacja PEG</option>
+    <option>Karmienie nocne PEG</option><option>Suplement</option><option>Inne</option>
+  </select>
+  <div class="row">
+    <div><label for="mealAmount">Ilość (ml, jeśli dotyczy)</label><input id="mealAmount" type="number" min="0" placeholder="Np. 100"></div>
+    <div><label for="mealTime">Godzina</label><input id="mealTime" type="time"></div>
+  </div>
+  <label for="mealNote">Co zjadła / otrzymała?</label><textarea id="mealNote" placeholder="Np. jogurt, kaszka, Kidsy..."></textarea>
+  <button class="primary" onclick="addMeal()">Zapisz posiłek</button>
+</section>
+
+<section class="card">
+  <h2>🌙 Sen</h2>
+  <label for="sleepKind">Rodzaj snu</label>
+  <select id="sleepKind"><option value="nap">Drzemka</option><option value="night">Sen nocny</option></select>
+  <div class="row">
+    <div><label for="sleepStart">Początek</label><input id="sleepStart" type="datetime-local"></div>
+    <div><label for="sleepEnd">Koniec (może być później)</label><input id="sleepEnd" type="datetime-local"></div>
+  </div>
+  <button class="primary" onclick="addSleep()">Zapisz sen</button>
+  <p class="muted">Czas trwania obliczamy z podanych godzin, także przez północ.</p>
+</section>
+
+<section class="card">
+  <h2>⏰ Przypomnienia</h2>
+  <label for="reminderInterval">Przypominaj o wodzie co</label>
+  <select id="reminderInterval"><option value="60">60 minut</option><option value="90">90 minut</option><option value="120">120 minut</option></select>
+  <label for="reminderEnabled">Przypomnienia w tej przeglądarce</label>
+  <select id="reminderEnabled"><option value="yes">Włączone</option><option value="no">Wyłączone</option></select>
+  <button class="primary" onclick="saveReminders()">Zapisz przypomnienia</button>
+  <p class="muted">Przypomnienia działają tylko wtedy, gdy strona jest otwarta. Przeglądarka może wymagać zgody na powiadomienia.</p>
+</section>
+
+<section class="card">
+  <h2>📅 Dziennik</h2>
+  <label for="filterDate">Dzień</label><input id="filterDate" type="date">
+  <div class="actions">
+    <button onclick="loadEntries()">Odśwież historię</button>
+    <button class="danger" onclick="exportEntries()">Eksportuj CSV</button>
+  </div>
+  <div id="entries" style="margin-top:10px"><p class="muted">Skonfiguruj połączenie, aby wyświetlić dziennik.</p></div>
+</section>
+
+<section class="card">
+  <h2>⚙️ Połączenie z bazą</h2>
+  <p class="muted">Wprowadź dane projektu Supabase. Użyj wyłącznie adresu projektu i klucza publicznego (Publishable key). Nie wklejaj tutaj klucza Secret.</p>
+  <label for="projectUrl">Project URL</label><input id="projectUrl" type="url" placeholder="https://twoj-projekt.supabase.co" autocomplete="url">
+  <label for="publicKey">Publishable key</label><input id="publicKey" type="password" placeholder="sb_publishable_..." autocomplete="off">
+  <div class="actions">
+    <button class="primary" onclick="connect()">Zapisz i połącz</button>
+    <button class="danger" onclick="disconnect()">Usuń dane połączenia z tej przeglądarki</button>
+  </div>
+  <div id="status" class="status" style="margin-top:12px">Nie połączono z bazą.</div>
+</section>
+</main>
+<footer>NelCare · Wspólny dziennik opieki</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+let projectUrl = '', publicKey = '', entriesCache = [], lastWaterAt = null;
+let reminderTimer = null;
+
+function localTime(){
+  const d = new Date();
+  return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+}
+function localDate(){
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+}
+function localDateTime(d = new Date()){
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}T${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+$('filterDate').value = localDate();
+['waterTime','toiletTime','poopTime','mealTime'].forEach(id => $(id).value = localTime());
+$('sleepStart').value = localDateTime();
+$('sleepEnd').value = localDateTime();
+
+function setStatus(text){ $('status').textContent = text; }
+function getConfig(){
+  try {
+    projectUrl = (localStorage.getItem('nelcare_url') || '').replace(/\/+$/,'');
+    publicKey = localStorage.getItem('nelcare_key') || '';
+  } catch(e) {}
+  $('projectUrl').value = projectUrl;
+  $('publicKey').value = publicKey;
+}
+async function api(path, options = {}){
+  if(!projectUrl || !publicKey) throw new Error('Najpierw skonfiguruj połączenie Supabase.');
+  const response = await fetch(projectUrl + '/rest/v1/' + path, {
+    ...options,
+    headers:{
+      apikey: publicKey,
+      Authorization: 'Bearer ' + publicKey,
+      'Content-Type':'application/json',
+      Prefer: options.method === 'POST' ? 'return=representation' : 'return=representation',
+      ...(options.headers || {})
+    }
+  });
+  if(!response.ok) {
+    const msg = await response.text();
+    throw new Error('Supabase: ' + response.status + ' — ' + msg.slice(0,350));
+  }
+  const text = await response.text();
+  return text ? JSON.parse(text) : [];
+}
+async function connect(){
+  const url = $('projectUrl').value.trim().replace(/\/+$/,'');
+  const key = $('publicKey').value.trim();
+  if(!/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(url)){
+    setStatus('Sprawdź adres Project URL.');
+    return;
+  }
+  if(!key){setStatus('Wklej klucz publiczny.');return;}
+  projectUrl = url; publicKey = key;
+  try{
+    localStorage.setItem('nelcare_url',url);
+    localStorage.setItem('nelcare_key',key);
+    await api('daily_entries?select=id&limit=1');
+    setStatus('Połączono z Supabase. Możesz zapisywać wpisy.');
+    await loadEntries();
+    loadReminders();
+  }catch(e){setStatus(e.message);}
+}
+function disconnect(){
+  localStorage.removeItem('nelcare_url');
+  localStorage.removeItem('nelcare_key');
+  projectUrl='';publicKey='';
+  $('projectUrl').value='';$('publicKey').value='';
+  setStatus('Dane połączenia usunięte z tej przeglądarki.');
+}
+async function addEntry(type,details,time){
+  try{
+    const date = localDate();
+    const created = new Date(`${date}T${time || localTime()}:00`);
+    const record = {entry_date:date,entry_type:type,details:{...details,time:time||localTime(),occurred_at:created.toISOString()}};
+    await api('daily_entries',{method:'POST',body:JSON.stringify(record)});
+    setStatus('Zapisano wpis.');
+    await loadEntries();
+  }catch(e){setStatus(e.message);}
+}
+async function addWater(){
+  const amount = Number($('waterAmount').value);
+  await addEntry('water',{amount_ml:amount},$('waterTime').value);
+  lastWaterAt = new Date();
+  updateWaterTotal();
+  startReminder();
+}
+async function addToilet(){
+  await addEntry('toilet',{action:$('toiletAction').value,result:$('toiletResult').value,note:$('toiletNote').value},$('toiletTime').value);
+}
+async function addPoop(){
+  await addEntry('poop',{consistency:$('poopConsistency').value,color:$('poopColor').value,note:$('poopNote').value},$('poopTime').value);
+}
+async function addMeal(){
+  await addEntry('meal',{name:$('mealName').value,amount_ml:$('mealAmount').value?Number($('mealAmount').value):null,note:$('mealNote').value},$('mealTime').value);
+}
+async function addSleep(){
+  const start = $('sleepStart').value, end = $('sleepEnd').value;
+  if(!start){setStatus('Podaj początek snu.');return;}
+  if(end && new Date(end)<new Date(start)){setStatus('Koniec snu nie może być przed początkiem.');return;}
+  const minutes = end ? Math.round((new Date(end)-new Date(start))/60000) : null;
+  await addEntry('sleep',{kind:$('sleepKind').value,start,end:end||null,duration_minutes:minutes},start.slice(11,16));
+}
+const labels={water:'💧 Woda',toilet:'🚽 Toaleta',poop:'💩 Wypróżnienie',meal:'🍽️ Posiłek',sleep:'🌙 Sen'};
+function summary(e){
+  const d=e.details||{};
+  if(e.entry_type==='water')return `${d.amount_ml||0} ml`;
+  if(e.entry_type==='toilet')return `${({pee:'Siku',poop:'Kupa',both:'Siku i kupa',nothing:'Nic'})[d.result]||d.result} · ${({sat:'Usiadła',refused:'Odmówiła',not_tried:'Nie próbowaliśmy'})[d.action]||''} ${d.note||''}`;
+  if(e.entry_type==='poop')return `${d.consistency||''}, ${d.color||''}. ${d.note||''}`;
+  if(e.entry_type==='meal')return `${d.name||''}${d.amount_ml?' · '+d.amount_ml+' ml':''}. ${d.note||''}`;
+  if(e.entry_type==='sleep')return `${d.kind==='nap'?'Drzemka':'Sen nocny'} · ${d.start||''}${d.end?' – '+d.end:''}${d.duration_minutes!=null?' · '+Math.floor(d.duration_minutes/60)+' h '+d.duration_minutes%60+' min':''}`;
+  return JSON.stringify(d);
+}
+async function loadEntries(){
+  if(!projectUrl||!publicKey){setStatus('Najpierw skonfiguruj połączenie Supabase.');return;}
+  try{
+    const day=$('filterDate').value||localDate();
+    const data=await api(`daily_entries?select=*&entry_date=eq.${encodeURIComponent(day)}&order=created_at.desc&limit=500`);
+    entriesCache=data;
+    renderEntries();
+    updateWaterTotal();
+  }catch(e){setStatus(e.message);}
+}
+function renderEntries(){
+  const root=$('entries');
+  if(!entriesCache.length){root.innerHTML='<p class="muted">Brak wpisów dla tego dnia.</p>';return;}
+  root.innerHTML=entriesCache.map(e=>`<div class="entry">
+    <div class="entrytop"><div><strong>${escapeHtml(labels[e.entry_type]||e.entry_type)}</strong><div>${escapeHtml(summary(e))}</div><small>${escapeHtml((e.details||{}).time||'')} · ${escapeHtml(e.created_at?new Date(e.created_at).toLocaleTimeString('pl-PL',{hour:'2-digit',minute:'2-digit'}):'')}</small></div>
+    <button class="danger" onclick="deleteEntry('${e.id}')">Usuń</button></div></div>`).join('');
+}
+function escapeHtml(s){
+  return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+async function deleteEntry(id){
+  if(!confirm('Usunąć ten wpis?'))return;
+  try{
+    await api(`daily_entries?id=eq.${encodeURIComponent(id)}`,{method:'DELETE'});
+    await loadEntries();
+    setStatus('Wpis usunięty.');
+  }catch(e){setStatus(e.message);}
+}
+function updateWaterTotal(){
+  const day=$('filterDate').value||localDate();
+  const total=entriesCache.filter(e=>e.entry_type==='water'&&e.entry_date===day).reduce((sum,e)=>sum+Number((e.details||{}).amount_ml||0),0);
+  $('waterTotal').textContent=total+' ml';
+}
+function exportEntries(){
+  const rows=[['data','typ','godzina','szczegoly'],...entriesCache.map(e=>[e.entry_date,e.entry_type,(e.details||{}).time||'',summary(e)])];
+  const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const url=URL.createObjectURL(blob),a=document.createElement('a');
+  a.href=url;a.download='nelcare-'+($('filterDate').value||localDate())+'.csv';a.click();URL.revokeObjectURL(url);
+}
+async function saveReminders(){
+  const settings={interval_minutes:Number($('reminderInterval').value),enabled:$('reminderEnabled').value==='yes'};
+  try{
+    await api('shared_reminders?id=eq.1',{method:'PATCH',body:JSON.stringify({settings,updated_at:new Date().toISOString()})});
+    localStorage.setItem('nelcare_reminders',JSON.stringify(settings));
+    setStatus('Zapisano wspólne przypomnienia.');
+    startReminder();
+  }catch(e){setStatus(e.message);}
+}
+async function loadReminders(){
+  try{
+    const rows=await api('shared_reminders?select=settings&id=eq.1');
+    if(rows[0]?.settings){
+      $('reminderInterval').value=String(rows[0].settings.interval_minutes||60);
+      $('reminderEnabled').value=rows[0].settings.enabled===false?'no':'yes';
+    }
+  }catch(e){setStatus(e.message);}
+  startReminder();
+}
+function startReminder(){
+  if(reminderTimer)clearInterval(reminderTimer);
+  if($('reminderEnabled').value!=='yes')return;
+  const mins=Number($('reminderInterval').value||60);
+  reminderTimer=setInterval(()=>{
+    if(document.visibilityState==='visible'){
+      alert('💧 NelCare: czas przypomnieć o wodzie.');
+    }
+  },mins*60*1000);
+}
+getConfig();
+if(projectUrl&&publicKey){connect();}
+$('filterDate').addEventListener('change',loadEntries);
+</script>
+</body>
+</html>
