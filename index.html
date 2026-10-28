@@ -360,3 +360,39 @@ $('filterDate').addEventListener('change',loadEntries);
 </script>
 </body>
 </html>
+<style>
+body {
+  padding-bottom: calc(90px + env(safe-area-inset-bottom));
+}
+.bottom-nav {
+  position: fixed;
+  z-index: 999;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+  padding: 8px 5px calc(8px + env(safe-area-inset-bottom));
+  background: #fffafd;
+  border-top: 1px solid #eadfea;
+}
+.bottom-nav button {
+  padding: 8px 2px;
+  background: #f5edf7;
+  border-radius: 12px;
+  font-size: 11px;
+}
+.bottom-nav button span {
+  display: block;
+  font-size: 19px;
+}
+</style>
+
+<nav class="bottom-nav">
+  <button onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>🏠</span>Start</button>
+  <button onclick="document.querySelectorAll('main > section.card')[3].scrollIntoView({behavior:'smooth'})"><span>🍽️</span>Posiłki</button>
+  <button onclick="document.querySelectorAll('main > section.card')[6].scrollIntoView({behavior:'smooth'})"><span>📔</span>Dziennik</button>
+  <button onclick="document.querySelectorAll('main > section.card')[7].scrollIntoView({behavior:'smooth'})"><span>⚙️</span>Ustawienia</button>
+  <button onclick="document.querySelectorAll('main > section.card')[4].scrollIntoView({behavior:'smooth'})"><span>🌙</span>Sen</button>
+</nav>
