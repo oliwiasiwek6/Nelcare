@@ -172,6 +172,31 @@ footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
 const $ = id => document.getElementById(id);
 let projectUrl = '', publicKey = '', entriesCache = [], lastWaterAt = null;
 let reminderTimer = null;
+unction showPage(page) {
+  const cards = [...document.querySelectorAll('main > section.card')];
+
+  const views = {
+    home: [0, 1, 2],
+    meals: [3],
+    sleep: [4],
+    settings: [5, 7],
+    diary: [6]
+  };
+
+  cards.forEach((card, index) => {
+    card.classList.toggle(
+      'hidden',
+      !(views[page] || views.home).includes(index)
+    );
+  });
+
+  document.querySelectorAll('.bottom-nav button').forEach((button, index) => {
+    const pages = ['home', 'meals', 'diary', 'settings', 'sleep'];
+    button.classList.toggle('active', pages[index] === page);
+  });
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
 function localTime(){
   const d = new Date();
@@ -389,10 +414,11 @@ body {
 }
 </style>
 
-<nav class="bottom-nav">
-  <button onclick="window.scrollTo({top:0,behavior:'smooth'})"><span>🏠</span>Start</button>
-  <button onclick="document.querySelectorAll('main > section.card')[3].scrollIntoView({behavior:'smooth'})"><span>🍽️</span>Posiłki</button>
-  <button onclick="document.querySelectorAll('main > section.card')[6].scrollIntoView({behavior:'smooth'})"><span>📔</span>Dziennik</button>
-  <button onclick="document.querySelectorAll('main > section.card')[7].scrollIntoView({behavior:'smooth'})"><span>⚙️</span>Ustawienia</button>
-  <button onclick="document.querySelectorAll('main > section.card')[4].scrollIntoView({behavior:'smooth'})"><span>🌙</span>Sen</button>
+<nav class="bottom-nav" aria-label="Główna nawigacja">
+  <button class="active" onclick="showPage('home')"><span>🏠</span>Start</button>
+  <button onclick="showPage('meals')"><span>🍽️</span>Posiłki</button>
+  <button onclick="showPage('diary')"><span>📔</span>Dziennik</button>
+  <button onclick="showPage('settings')"><span>⚙️</span>Ustawienia</button>
+  <button onclick="showPage('sleep')"><span>🌙</span>Sen</button>
 </nav>
+<script>showPage('home');</script>
