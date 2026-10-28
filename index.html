@@ -128,6 +128,14 @@ footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
 
 <section class="card">
   <h2>🍽️ Posiłek</h2>
+  <div id="pegIllustration" hidden style="text-align:center;padding:8px 0 14px">
+  <img
+    src="./strzykawka-peg.png"
+    alt="Pastelowa strzykawka do karmienia PEG"
+    style="width:min(190px,65%);height:auto;object-fit:contain"
+  >
+  <p class="muted">Karmienie PEG</p>
+</div>
   <label for="mealName">Posiłek</label>
   <select id="mealName">
     <option>Śniadanie doustne</option><option>Śniadanie PEG</option>
@@ -440,6 +448,13 @@ function startReminder(){
 getConfig();
 if(projectUrl&&publicKey){connect();}
 $('filterDate').addEventListener('change',loadEntries);
+function togglePegIllustration() {
+  const isPeg = /PEG/i.test($('mealName').value);
+  $('pegIllustration').hidden = !isPeg;
+}
+
+$('mealName').addEventListener('change', togglePegIllustration);
+togglePegIllustration();
 </script>
 </body>
 </html>
