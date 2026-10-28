@@ -662,6 +662,21 @@ textarea {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+/* Pola daty i czasu — dopasowanie do szerokości karty */
+input[type="time"],
+input[type="date"],
+input[type="datetime-local"] {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 10px 6px;
+  font-size: 16px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+}
 </style>
 
 <nav class="bottom-nav" aria-label="Główna nawigacja">
