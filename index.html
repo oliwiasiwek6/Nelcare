@@ -54,6 +54,28 @@ footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
 <main>
 <section class="card">
   <h2>💧 Woda</h2>
+  <div class="day-summary">
+    <div class="summary-tile water-tile">
+      <span class="summary-icon">💧</span>
+      <span class="summary-label">Woda dzisiaj</span>
+      <strong id="summaryWater">0 ml</strong>
+    </div>
+    <div class="summary-tile meal-tile">
+      <span class="summary-icon">🍽️</span>
+      <span class="summary-label">Posiłki</span>
+      <strong id="summaryMeals">0</strong>
+    </div>
+    <div class="summary-tile diary-tile">
+      <span class="summary-icon">📔</span>
+      <span class="summary-label">Wpisy</span>
+      <strong id="summaryEntries">0</strong>
+    </div>
+    <div class="summary-tile sleep-tile">
+      <span class="summary-icon">🌙</span>
+      <span class="summary-label">Ostatni sen</span>
+      <strong id="summarySleep">Brak</strong>
+    </div>
+  </div>
   <div class="bigtotal" id="waterTotal">0 ml</div>
   <p class="muted">Suma zapisanych porcji w wybranym dniu.</p>
   <div class="row">
@@ -339,9 +361,45 @@ async function deleteEntry(id){
   }catch(e){setStatus(e.message);}
 }
 function updateWaterTotal(){
-  const day=$('filterDate').value||localDate();
-  const total=entriesCache.filter(e=>e.entry_type==='water'&&e.entry_date===day).reduce((sum,e)=>sum+Number((e.details||{}).amount_ml||0),0);
-  $('waterTotal').textContent=total+' ml';
+  const day = $('filterDate').value || localDate();
+  const dayEntries = entriesCache.filter(e => e.entry_date === day);
+
+  const total = dayEntries
+    .filter(e => e.entry_type === 'water')
+    .reduce((sum, e) => sum + Number((e.details || {}).amount_ml || 0), 0);
+
+  $('waterTotal').textContent = total + ' ml';
+
+  if ($('summaryWater')) {
+    $('summaryWater').textContent = total + ' ml';
+  }
+
+  if ($('summaryMeals')) {
+    $('summaryMeals').textContent =
+      dayEntries.filter(e => e.entry_type === 'meal').length;
+  }
+
+  if ($('summaryEntries')) {
+    $('summaryEntries').textContent = dayEntries.length;
+  }
+
+  if ($('summarySleep')) {
+    const sleeps = dayEntries
+      .filter(e => e.entry_type === 'sleep')
+      .sort((a, b) =>
+        String((b.details || {}).start || b.created_at || '')
+          .localeCompare(String((a.details || {}).start || a.created_at || ''))
+      );
+
+    if (sleeps.length) {
+      const d = sleeps[0].details || {};
+      const kind = d.kind === 'nap' ? 'Drzemka' : 'Nocny';
+      const time = d.start ? ' · ' + d.start.slice(11, 16) : '';
+      $('summarySleep').textContent = kind + time;
+    } else {
+      $('summarySleep').textContent = 'Brak';
+    }
+  }
 }
 function exportEntries(){
   const rows=[['data','typ','godzina','szczegoly'],...entriesCache.map(e=>[e.entry_date,e.entry_type,(e.details||{}).time||'',summary(e)])];
@@ -412,6 +470,61 @@ body {
   display: block;
   font-size: 19px;
 }
+day-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+
+.summary-tile {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+  padding: 16px;
+  border-radius: 20px;
+  border: 1px solid #ffffffc9;
+  box-shadow: 0 5px 18px #65508012;
+}
+
+.water-tile {
+  background: linear-gradient(135deg, #e4eaff, #f3f0ff);
+}
+
+.meal-tile {
+  background: linear-gradient(135deg, #fff0e5, #fff8ef);
+}
+
+.diary-tile {
+  background: linear-gradient(135deg, #f6e8f5, #fff4fb);
+}
+
+.sleep-tile {
+  background: linear-gradient(135deg, #e2f4ee, #f2fbf7);
+}
+
+.summary-icon {
+  font-size: 25px;
+}
+
+.summary-label {
+  font-size: 12px;
+  color: #766a82;
+}
+
+.summary-tile strong {
+  font-size: 21px;
+  color: #40384b;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 600px) {
+  .day-summary {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 </style>
 
 <nav class="bottom-nav" aria-label="Główna nawigacja">
