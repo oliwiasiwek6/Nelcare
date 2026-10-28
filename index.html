@@ -172,7 +172,7 @@ footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
 const $ = id => document.getElementById(id);
 let projectUrl = '', publicKey = '', entriesCache = [], lastWaterAt = null;
 let reminderTimer = null;
-unction showPage(page) {
+function showPage(page) {
   const cards = [...document.querySelectorAll('main > section.card')];
 
   const views = {
