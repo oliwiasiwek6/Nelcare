@@ -58,6 +58,29 @@ sleep-fields {
   max-width: 100%;
   box-sizing: border-box;
 }
+/* Dopasowanie formularzy do szerokości karty */
+.row {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.row > div {
+  min-width: 0;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 </style>
 </head>
 <body>
