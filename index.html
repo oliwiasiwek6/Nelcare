@@ -156,10 +156,16 @@ footer{text-align:center;padding:10px 20px 35px;color:#82768d;font-size:12px}
   <h2>🌙 Sen</h2>
   <label for="sleepKind">Rodzaj snu</label>
   <select id="sleepKind"><option value="nap">Drzemka</option><option value="night">Sen nocny</option></select>
-  <div class="row">
-    <div><label for="sleepStart">Początek</label><input id="sleepStart" type="datetime-local"></div>
-    <div><label for="sleepEnd">Koniec </label><input id="sleepEnd" type="datetime-local"></div>
+  <div class="sleep-fields">
+  <div>
+    <label for="sleepStart">Początek</label>
+    <input id="sleepStart" type="datetime-local">
   </div>
+  <div>
+    <label for="sleepEnd">Koniec</label>
+    <input id="sleepEnd" type="datetime-local">
+  </div>
+</div>
   <button class="primary" onclick="addSleep()">Zapisz sen</button>
   <p class="muted">Czas trwania obliczamy z podanych godzin, także przez północ.</p>
 </section>
@@ -533,7 +539,27 @@ day-summary {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
+sleep-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
 
+.sleep-fields > div {
+  min-width: 0;
+}
+
+.sleep-fields input {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .sleep-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
 </style>
 
 <nav class="bottom-nav" aria-label="Główna nawigacja">
