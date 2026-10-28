@@ -193,10 +193,16 @@ input[type="date"] {
     <option>Kolacja doustna</option><option>Kolacja PEG</option>
     <option>Karmienie nocne PEG</option><option>Suplement</option><option>Inne</option>
   </select>
-  <div class="row">
-    <div><label for="mealAmount">Ilość (ml, jeśli dotyczy)</label><input id="mealAmount" type="number" min="0" placeholder="Np. 100"></div>
-    <div><label for="mealTime">Godzina</label><input id="mealTime" type="time"></div>
+  <div class="meal-fields">
+  <div>
+    <label for="mealAmount">Ilość (ml, jeśli dotyczy)</label>
+    <input id="mealAmount" type="number" min="0">
   </div>
+  <div>
+    <label for="mealTime">Godzina</label>
+    <input id="mealTime" type="time">
+  </div>
+</div>
   <label for="mealNote">Co zjadła / otrzymała?</label><textarea id="mealNote" placeholder="Np. jogurt, kaszka, Kidsy..."></textarea>
   <button class="primary" onclick="addMeal()">Zapisz posiłek</button>
 </section>
@@ -631,6 +637,30 @@ textarea {
 .card {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+.meal-fields {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 10px;
+  width: 100%;
+}
+
+.meal-fields > div {
+  min-width: 0;
+}
+
+.meal-fields input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 600px) {
+  .meal-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 </style>
 
